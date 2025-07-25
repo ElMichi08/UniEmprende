@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:uni_emprende/view/catalog_view.dart';
-import 'package:uni_emprende/view/register_view.dart';
+import 'package:uni_emprende/view/register_view.dart'; // Asegúrate de que la ruta sea correcta
+import 'package:uni_emprende/view/catalog_view.dart'; // Asegúrate de que la ruta sea correcta
+import 'package:uni_emprende/backend/services/auth_service.dart'; // Asegúrate de que la ruta sea correcta
+import 'package:uni_emprende/main.dart'; // Para usar la extensión showSnackBar
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -21,13 +24,40 @@ class _LoginViewState extends State<LoginView> {
     super.dispose();
   }
 
-  void _handleLogin() {
-    // Aquí iría la lógica de autenticación
-    // Por ahora, solo navegamos al catálogo
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const CatalogView()),
-    );
+  Future<void> _handleLogin() async {
+    try {
+      await AuthService().signInWithEmail(
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
+      );
+      if (mounted) {
+        context.showSnackBar('Inicio de sesión exitoso');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const CatalogView()),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      if (mounted) {
+        String message;
+        if (e.code == 'user-not-found') {
+          message = 'No se encontró un usuario con ese correo.';
+        } else if (e.code == 'wrong-password') {
+          message = 'Contraseña incorrecta.';
+        } else if (e.code == 'invalid-domain') {
+          message = e.message ?? 'Solo se permiten correos @espe.edu.ec';
+        } else if (e.code == 'invalid-email') {
+          message = 'El formato del correo electrónico es inválido.';
+        } else {
+          message = 'Error de autenticación: ${e.message}';
+        }
+        context.showSnackBar(message, isError: true);
+      }
+    } catch (e) {
+      if (mounted) {
+        context.showSnackBar('Ocurrió un error inesperado: $e', isError: true);
+      }
+    }
   }
 
   @override
@@ -40,7 +70,7 @@ class _LoginViewState extends State<LoginView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/UniEmprendeLogo.jpg', 
+                'assets/logo.png', // Ruta del logo
                 height: 120,
               ),
               const SizedBox(height: 40),
@@ -49,7 +79,7 @@ class _LoginViewState extends State<LoginView> {
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF333333), 
+                  color: Color(0xFF333333), // Color de texto oscuro
                 ),
               ),
               const SizedBox(height: 30),
@@ -84,7 +114,7 @@ class _LoginViewState extends State<LoginView> {
                 child: ElevatedButton(
                   onPressed: _handleLogin,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFE53935),
+                    backgroundColor: const Color(0xFFE53935), // Color rojo del botón
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
@@ -107,7 +137,7 @@ class _LoginViewState extends State<LoginView> {
                 child: const Text(
                   'Registrarse',
                   style: TextStyle(
-                    color: Color(0xFFE53935),
+                    color: Color(0xFFE53935), // Color rojo para el texto
                     fontSize: 16,
                   ),
                 ),
