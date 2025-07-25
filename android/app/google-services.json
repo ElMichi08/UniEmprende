@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1036361394768",
+    "project_id": "uniemprende",
+    "storage_bucket": "uniemprende.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1036361394768:android:0c6aa593e3e91db6773f55",
+        "android_client_info": {
+          "package_name": "com.example.uni_emprende"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxLyCcCJmx4WL1Hh2vrAFO1WUVWwjTS8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'backend/firebase_options.dart';
 import 'package:uni_emprende/view/login_view.dart';
-void main() {
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -12,14 +17,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Uni Emprende ESPE App',
       theme: ThemeData(
-        primarySwatch: Colors.red, 
+        primarySwatch: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          fillColor: Colors.grey[100], 
+          fillColor: Colors.grey[100],
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide.none, 
+            borderSide: BorderSide.none,
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
@@ -42,11 +47,11 @@ class MyApp extends StatelessWidget {
         ),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-            foregroundColor: const Color(0xFFE53935), // Color rojo para los botones de texto
+            foregroundColor: const Color(0xFFE53935),
           ),
         ),
       ),
-      home: const LoginView(), // La pantalla inicial de tu aplicación
+      home: const LoginView(),
     );
   }
 }
