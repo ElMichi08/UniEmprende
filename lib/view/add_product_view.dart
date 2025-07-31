@@ -6,6 +6,7 @@ import 'package:uni_emprende/backend/services/storage_service.dart';
 import 'package:uni_emprende/backend/model/emprendimiento_model.dart';
 import 'package:uni_emprende/backend/model/producto_model.dart';
 import 'package:uni_emprende/main.dart';
+import 'package:uni_emprende/widgets/custom_bottom_navigation.dart';
 
 class AddProductView extends StatefulWidget {
   const AddProductView({super.key});
@@ -25,6 +26,7 @@ class _AddProductViewState extends State<AddProductView> {
   XFile? _selectedImage;
   bool _isLoading = false;
   EmprendimientoModel? _emprendimiento;
+  int _selectedIndex = 2;
 
   @override
   void initState() {
@@ -335,6 +337,9 @@ class _AddProductViewState extends State<AddProductView> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavigation(
+        currentIndex: _selectedIndex,
       ),
     );
   }

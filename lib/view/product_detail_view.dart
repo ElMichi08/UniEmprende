@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:uni_emprende/backend/model/producto_model.dart';
 import 'package:uni_emprende/backend/services/firestore_service.dart';
 import 'package:uni_emprende/backend/model/emprendimiento_model.dart';
+import 'package:uni_emprende/widgets/custom_bottom_navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProductDetailView extends StatefulWidget {
@@ -20,6 +21,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
   final FirestoreService _firestoreService = FirestoreService();
   EmprendimientoModel? _emprendimiento;
   bool _isLoading = true;
+  int _selectedIndex = 0; // Inicio está seleccionado por defecto
 
   @override
   void initState() {
@@ -29,7 +31,6 @@ class _ProductDetailViewState extends State<ProductDetailView> {
 
   Future<void> _cargarEmprendimiento() async {
     try {
-      // Buscar el emprendimiento por ID
       final emprendimientos = await _firestoreService.obtenerTodosLosEmprendimientos();
       final emprendimiento = emprendimientos.firstWhere(
         (e) => e.id == widget.producto.emprendimientoId,
@@ -229,31 +230,8 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                 ],
               ),
             ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: const Color(0xFFE53935),
-        unselectedItemColor: Colors.grey[600],
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Inicio',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.filter_list),
-            label: 'Filtro',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle_outline),
-            label: 'Agregar',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Perfil',
-          ),
-        ],
-        onTap: (index) {
-          Navigator.pop(context);
-        },
+      bottomNavigationBar: CustomBottomNavigation(
+        currentIndex: _selectedIndex,
       ),
     );
   }
