@@ -83,7 +83,7 @@ class _RegisterViewState extends State<RegisterView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/logo.png', // Ruta del logo
+                'assets/UniEmprendeLogo.jpg', 
                 height: 120,
               ),
               const SizedBox(height: 40),

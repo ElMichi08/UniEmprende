@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:uni_emprende/backend/services/auth_service.dart'; // Asegúrate de que la ruta sea correcta
-import 'package:uni_emprende/backend/firebase_options.dart'; // Asegúrate de que la ruta sea correcta
+import 'package:uni_emprende/backend/services/auth_service.dart';
+import 'backend/firebase_options.dart';
 import 'package:uni_emprende/view/login_view.dart';
 import 'package:uni_emprende/view/catalog_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
