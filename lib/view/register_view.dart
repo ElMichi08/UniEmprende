@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:uni_emprende/view/catalog_view.dart';
-import 'package:uni_emprende/view/login_view.dart';
+import 'package:uni_emprende/view/login_view.dart'; // Asegúrate de que la ruta sea correcta
+import 'package:uni_emprende/view/catalog_view.dart'; // Asegúrate de que la ruta sea correcta
+import 'package:uni_emprende/backend/services/auth_service.dart'; // Importa tu servicio de autenticación
+import 'package:uni_emprende/main.dart'; // Para usar la extensión showSnackBar
+import 'package:firebase_auth/firebase_auth.dart'; // Para manejar FirebaseAuthException
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -15,6 +18,7 @@ class _RegisterViewState extends State<RegisterView> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+  // final AuthService _authService = AuthService();
 
   @override
   void dispose() {
@@ -26,13 +30,47 @@ class _RegisterViewState extends State<RegisterView> {
     super.dispose();
   }
 
-  void _handleRegister() {
-    // Aquí iría la lógica de registro
-    // Por ahora, solo navegamos al catálogo
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const CatalogView()),
-    );
+  Future<void> _handleRegister() async {
+    if (_passwordController.text != _confirmPasswordController.text) {
+      if (mounted) {
+        context.showSnackBar('Las contraseñas no coinciden.', isError: true);
+      }
+      return;
+    }
+
+    try {
+      await AuthService().registerWithEmail(
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
+      );
+      if (mounted) {
+        context.showSnackBar('Registro exitoso. ¡Bienvenido!');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const CatalogView()),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      if (mounted) {
+        String message;
+        if (e.code == 'weak-password') {
+          message = 'La contraseña es demasiado débil.';
+        } else if (e.code == 'email-already-in-use') {
+          message = 'El correo electrónico ya está en uso.';
+        } else if (e.code == 'invalid-domain') {
+          message = e.message ?? 'Solo se permiten correos @espe.edu.ec';
+        } else if (e.code == 'invalid-email') {
+          message = 'El formato del correo electrónico es inválido.';
+        } else {
+          message = 'Error de registro: ${e.message}';
+        }
+        context.showSnackBar(message, isError: true);
+      }
+    } catch (e) {
+      if (mounted) {
+        context.showSnackBar('Ocurrió un error inesperado: $e', isError: true);
+      }
+    }
   }
 
   @override
@@ -45,7 +83,7 @@ class _RegisterViewState extends State<RegisterView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/UniEmprendeLogo.jpg', // Ruta del logo
+                'assets/UniEmprendeLogo.jpg', 
                 height: 120,
               ),
               const SizedBox(height: 40),

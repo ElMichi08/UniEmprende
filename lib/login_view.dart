@@ -70,7 +70,7 @@ class _LoginViewState extends State<LoginView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/UniEmprendeLogo.jpg', 
+                'uni_emprende', // Ruta del logo
                 height: 120,
               ),
               const SizedBox(height: 40),
