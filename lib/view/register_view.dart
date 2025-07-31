@@ -92,7 +92,7 @@ class _RegisterViewState extends State<RegisterView> {
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF333333), // Color de texto oscuro
+                  color: Color(0xFF333333), 
                 ),
               ),
               const SizedBox(height: 30),
