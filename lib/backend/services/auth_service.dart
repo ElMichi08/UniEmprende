@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Necesario para Firestore
+import '../model/emprendimiento_model.dart'; 
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -15,6 +17,19 @@ class AuthService {
       email: email,
       password: password,
     );
+  }
+
+  /// Obtener un emprendimiento por ID
+  Future<EmprendimientoModel?> obtenerEmprendimientoPorId(String id) async {
+    final doc = await FirebaseFirestore.instance
+        .collection('emprendimientos')
+        .doc(id)
+        .get();
+
+    if (doc.exists) {
+      return EmprendimientoModel.fromJson(doc.data()!, doc.id);
+    }
+    return null;
   }
 
   Future<UserCredential> registerWithEmail(String email, String password) async {
