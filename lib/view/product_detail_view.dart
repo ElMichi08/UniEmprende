@@ -4,7 +4,7 @@ import 'package:uni_emprende/backend/services/firestore_service.dart';
 import 'package:uni_emprende/backend/model/emprendimiento_model.dart';
 import 'package:uni_emprende/widgets/custom_bottom_navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:uni_emprende/main.dart';
+import 'package:uni_emprende/main.dart'; // Para usar showSnackBar
 
 class ProductDetailView extends StatefulWidget {
   final ProductoModel producto;
