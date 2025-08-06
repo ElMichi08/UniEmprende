@@ -4,6 +4,7 @@ import 'package:uni_emprende/backend/services/firestore_service.dart';
 import 'package:uni_emprende/backend/model/emprendimiento_model.dart';
 import 'package:uni_emprende/widgets/custom_bottom_navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:uni_emprende/main.dart';
 
 class ProductDetailView extends StatefulWidget {
   final ProductoModel producto;
@@ -31,6 +32,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
 
   Future<void> _cargarEmprendimiento() async {
     try {
+      // Buscar el emprendimiento por ID
       final emprendimientos = await _firestoreService.obtenerTodosLosEmprendimientos();
       final emprendimiento = emprendimientos.firstWhere(
         (e) => e.id == widget.producto.emprendimientoId,
@@ -46,15 +48,16 @@ class _ProductDetailViewState extends State<ProductDetailView> {
         _isLoading = false;
       });
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al cargar información del emprendimiento: $e')),
-        );
+        context.showSnackBar('Error al cargar información del emprendimiento: $e', isError: true);
       }
     }
   }
 
   Future<void> _contactarVendedor() async {
-    if (_emprendimiento == null) return;
+    if (_emprendimiento == null) {
+      context.showSnackBar('No se pudo obtener la información del vendedor.', isError: true);
+      return;
+    }
 
     showModalBottomSheet(
       context: context,
@@ -81,6 +84,8 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                     final url = 'https://wa.me/${_emprendimiento!.whatsapp.replaceAll('+', '')}?text=Hola, estoy interesado en ${widget.producto.nombre}';
                     if (await canLaunchUrl(Uri.parse(url))) {
                       await launchUrl(Uri.parse(url));
+                    } else {
+                      if (mounted) context.showSnackBar('No se pudo abrir WhatsApp.', isError: true);
                     }
                     if (mounted) Navigator.pop(context);
                   },
@@ -93,6 +98,8 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                   final url = 'mailto:${_emprendimiento!.correoContacto}?subject=Consulta sobre ${widget.producto.nombre}';
                   if (await canLaunchUrl(Uri.parse(url))) {
                     await launchUrl(Uri.parse(url));
+                  } else {
+                    if (mounted) context.showSnackBar('No se pudo abrir el cliente de correo.', isError: true);
                   }
                   if (mounted) Navigator.pop(context);
                 },
@@ -232,6 +239,13 @@ class _ProductDetailViewState extends State<ProductDetailView> {
             ),
       bottomNavigationBar: CustomBottomNavigation(
         currentIndex: _selectedIndex,
+        onTap: (index) {
+          // La navegación de la barra inferior se maneja en CustomBottomNavigation
+          // Aquí solo actualizamos el índice si es necesario para el estado local
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
     );
   }
