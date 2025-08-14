@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "526468202444",
+    "project_id": "construccionesw-23e6b",
+    "storage_bucket": "construccionesw-23e6b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:526468202444:android:e951c9f4730535d0b92769",
+        "android_client_info": {
+          "package_name": "com.example.lata_emprende"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDs0fyYYoeiAsUBkMEZ9pen3okrvW6QgiQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
